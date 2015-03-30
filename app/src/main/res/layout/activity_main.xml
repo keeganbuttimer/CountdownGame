@@ -3,23 +3,74 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:background="#B4B6B6">
 
     <TextView android:text="@string/welcome_string" android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/welcome_message"
-        android:textColor="#ff498eff"
+        android:textColor="#516D6D"
         android:textStyle="bold"
         android:visibility="visible"
         android:gravity="center"
-        android:textSize="40dp" />
+        android:textSize="40sp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/start_button"
-        android:id="@+id/start_button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/welcome_message">
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/start_button"
+            android:id="@+id/start_button"
+            android:layout_below="@+id/welcome_message"
+            android:layout_alignLeft="@+id/highscores_button"
+            android:layout_alignStart="@+id/highscores_button"
+            android:layout_marginTop="150dp"
+            android:layout_alignRight="@+id/highscores_button"
+            android:layout_alignEnd="@+id/highscores_button"
+            android:layout_gravity="center_horizontal"
+            android:background="#516D6D"
+            android:textColor="#B4B6B6"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/highscores_button"
+            android:id="@+id/highscores_button"
+            android:layout_marginTop="35dp"
+            android:layout_below="@+id/settings_button"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:background="#516D6D"
+            android:textColor="#B4B6B6"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_button"
+            android:id="@+id/settings_button"
+            android:layout_marginTop="35dp"
+            android:layout_below="@+id/start_button"
+            android:layout_alignLeft="@+id/highscores_button"
+            android:layout_alignStart="@+id/highscores_button"
+            android:layout_alignRight="@+id/highscores_button"
+            android:layout_alignEnd="@+id/highscores_button"
+            android:layout_gravity="center_horizontal"
+            android:background="#516D6D"
+            android:textColor="#B4B6B6"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </RelativeLayout>
