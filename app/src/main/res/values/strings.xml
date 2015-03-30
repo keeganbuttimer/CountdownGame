@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Countdown</string>
+
+    <string name="welcome_string">Welcome!</string>
+    <string name="start_button">Start</string>
+    <string name="action_settings">Settings</string>
+</resources>
