@@ -39,7 +39,8 @@
             android:background="#516D6D"
             android:textColor="#B4B6B6"
             android:textSize="18dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:onClick="startGame"/>
 
         <Button
             android:layout_width="150dp"

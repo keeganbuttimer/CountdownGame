@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".startGameActivity"
+            android:label="@string/title_activity_start_game"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.augustana.csc490.countdown.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,13 +1,20 @@
 package edu.augustana.csc490.countdown;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class MainActivity extends ActionBarActivity {
 
+    public void startGame(View view) {
+        // Do something in response to button
+        Intent intent = new Intent(this, startGameActivity.class);
+        startActivity(intent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
