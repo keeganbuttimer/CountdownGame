@@ -50,6 +50,7 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
     private Paint backgroundPaint;
     private Paint circlePaint;
     private Paint scorePaint;
+    private Paint textPaint;
     private Random r;
     private SoundPool mySound;
     private int beepId;
@@ -83,6 +84,10 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
         scorePaint.setColor(Color.parseColor("#B4B6B6"));
         scorePaint.setTextSize(72);
         scorePaint.setTextAlign(Paint.Align.CENTER);
+        textPaint= new Paint();
+        textPaint.setTextSize(100);
+        textPaint.setColor(Color.parseColor("#516D6D"));
+        textPaint.setTextAlign(Paint.Align.CENTER);
     }
 
     // called when the size changes (and first time, when view is created)
@@ -153,7 +158,10 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
             canvas.drawCircle((int) circle2x, (int) circle2y, circle2radius, circlePaint);
             canvas.drawText(""+score, centerX, centerY-30, scorePaint);
             canvas.drawText("Lives: "+lives, centerX, centerY+60, scorePaint);
-
+            if(score==0) {
+                canvas.drawText("Tap the screen when ", centerX, 120, textPaint);
+                canvas.drawText("the dots overlap.", centerX+60, 210, textPaint);
+            }
         }
     }
 
@@ -238,6 +246,7 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
                     if (displayResult() == 0) {
                         mySound.play(buzzId, 1, 1, 1, 0, 1);
                         positiveMultiplier = 1;
+                        bonusLife=0;
                         lives--;
                         if (lives <= 0) {
                             isGameOver = true;
@@ -270,8 +279,8 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
                         else {
                             circle2speed = 1 + r.nextInt(7);
                         }
-                        circle1radius = 20 + r.nextInt(21);
-                        circle2radius = 20 + r.nextInt(21);
+                        circle1radius = 20 + r.nextInt(41);
+                        circle2radius = 20 + r.nextInt(41);
                     }
                 }
 

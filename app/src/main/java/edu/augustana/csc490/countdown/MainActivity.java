@@ -1,5 +1,6 @@
 package edu.augustana.csc490.countdown;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -10,7 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
 
     public void startGame(View view) {
