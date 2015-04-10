@@ -9,6 +9,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -47,29 +49,40 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
     private Paint circleBackgroundPaint;
     private Paint backgroundPaint;
     private Paint circlePaint;
-    private Paint pass;
-    private Paint fail;
+    private Paint scorePaint;
     private Random r;
+    private SoundPool mySound;
+    private int beepId;
+    private int buzzId;
+    private int score;
+    private int positiveMultiplier;
+    private int negativeMultiplier;
+    private int round;
+    private int lives;
+    private int bonusLife;
 
-    private boolean changeColor;
+    private boolean levelsGame;
+    private boolean randomGame;
+
 
     public startGameView(Context context, AttributeSet atts)
     {
         super(context, atts);
+        mySound= new SoundPool(1, AudioManager.STREAM_MUSIC,0);
+        buzzId=mySound.load(context,R.raw.buzz,1);
+        beepId=mySound.load(context,R.raw.beep,1);
         mainActivity = (Activity) context;
-
         getHolder().addCallback(this);
-
         circleBackgroundPaint = new Paint();
         circleBackgroundPaint.setColor(Color.parseColor("#516D6D"));
         backgroundPaint = new Paint();
-        backgroundPaint.setColor(Color.parseColor("#BEC0C0"));
+        backgroundPaint.setColor(Color.parseColor("#B4B6B6"));
         circlePaint = new Paint();
-        pass=new Paint();
-        pass.setColor(Color.GREEN);
-        fail=new Paint();
-        fail.setColor(Color.RED);
         circlePaint.setColor(Color.DKGRAY);
+        scorePaint= new Paint();
+        scorePaint.setColor(Color.parseColor("#B4B6B6"));
+        scorePaint.setTextSize(72);
+        scorePaint.setTextAlign(Paint.Align.CENTER);
     }
 
     // called when the size changes (and first time, when view is created)
@@ -77,16 +90,28 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {
         super.onSizeChanged(w, h, oldw, oldh);
-
         screenWidth = w;
         screenHeight = h;
-        trackRadius=100;
+        if(levelsGame) {
+            trackRadius = 100;
+        }
+        else{
+            trackRadius = 350;
+        }
         circle1degree=0;
         circle2degree=0;
         circle1radius=40;
         circle2radius=40;
         circle1speed=2;
         circle2speed=2;
+        lives=3;
+        score=0;
+        positiveMultiplier =1;
+        negativeMultiplier =-1;
+        round=1;
+        bonusLife=0;
+        randomGame=true;
+        levelsGame=false;
         startNewGame();
     }
 
@@ -123,25 +148,11 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
 
         if (canvas != null) {
             canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-            if(changeColor){
-                if(displayResult()==1) {
-                    canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), pass);
-                }
-                else{
-                    canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), fail);
-                }
-            }
             canvas.drawCircle(centerX, centerY, trackRadius, circleBackgroundPaint);
-            canvas.drawCircle((int)circle1x,(int)circle1y,circle1radius, circlePaint);
-            canvas.drawCircle((int)circle2x,(int)circle2y,circle2radius, circlePaint);
-            canvas.drawText("Circle 1 Speed: " + circle1speed, 200, 140, circlePaint);
-            canvas.drawText("Circle 2 Speed: "+circle2speed,200,170,circlePaint);
-            canvas.drawText("Circle 1 Radius: "+circle1radius,200,200,circlePaint);
-            canvas.drawText("Circle 2 Radius: "+circle2radius,200,230,circlePaint);
-            canvas.drawText("Track radius: "+trackRadius,200,260,circlePaint);
-            changeColor=false;
-
-
+            canvas.drawCircle((int) circle1x, (int) circle1y, circle1radius, circlePaint);
+            canvas.drawCircle((int) circle2x, (int) circle2y, circle2radius, circlePaint);
+            canvas.drawText(""+score, centerX, centerY-30, scorePaint);
+            canvas.drawText("Lives: "+lives, centerX, centerY+60, scorePaint);
 
         }
     }
@@ -194,29 +205,78 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public boolean onTouchEvent(MotionEvent e)
     {
-        if (e.getAction() == MotionEvent.ACTION_DOWN)
-        {
-            changeColor=true;
-            if(displayResult()==0) {
-                //isGameOver = true;
-            }
-            else{
-                trackRadius+=50;
-                if(trackRadius>400){
-                    trackRadius=100;
-                    speedUp();
-                    if(circle1speed>5 || circle2speed>5) {
-                        circle1speed=2;
-                        circle2speed=2;
-                        shrink();
-                        if(circle1radius<20 || circle2radius<20){
-                            isGameOver=true;
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            if (!isGameOver) {
+                if (levelsGame) {
+                    if (displayResult() == 0) {
+                        mySound.play(buzzId, 1, 1, 1, 0, 1);
+                        positiveMultiplier = 1;
+                        score -= 10 * round * negativeMultiplier;
+                        negativeMultiplier++;
+                    } else {
+                        negativeMultiplier = 1;
+                        score += round * 10 * positiveMultiplier;
+                        positiveMultiplier++;
+                        mySound.play(beepId, 1, 1, 1, 0, 1);
+                        trackRadius += 50;
+                        if (trackRadius > 400) {
+                            trackRadius = 100;
+                            speedUp();
+                            if (circle1speed > 5 || circle2speed > 5) {
+                                circle1speed = 2;
+                                circle2speed = 2;
+                                shrink();
+                                round++;
+                                if (circle1radius < 20 || circle2radius < 20) {
+                                    isGameOver = true;
+                                }
+                            }
                         }
                     }
                 }
+                if (randomGame) {
+                    if (displayResult() == 0) {
+                        mySound.play(buzzId, 1, 1, 1, 0, 1);
+                        positiveMultiplier = 1;
+                        lives--;
+                        if (lives <= 0) {
+                            isGameOver = true;
+                        }
+                        trackRadius = 350;
+                        circle1speed = 1 + r.nextInt(7);
+                        if(circle1speed>=4){
+                            circle2speed=1+r.nextInt(8-circle1speed);
+                        }
+                        else {
+                            circle2speed = 1 + r.nextInt(7);
+                        }
+                        circle1radius = 20 + r.nextInt(41);
+                        circle2radius = 20 + r.nextInt(41);
+                    } else {
+                        score += 10 * positiveMultiplier;
+                        positiveMultiplier++;
+                        bonusLife++;
+                        if (bonusLife == 5) {
+                            lives++;
+                            bonusLife = 0;
+                        }
+                        mySound.play(beepId, 1, 1, 1, 0, 1);
+
+                        trackRadius = 350;
+                        circle1speed = 1 + r.nextInt(7);
+                        if(circle1speed>=4){
+                            circle2speed=1+r.nextInt(8-circle1speed);
+                        }
+                        else {
+                            circle2speed = 1 + r.nextInt(7);
+                        }
+                        circle1radius = 20 + r.nextInt(21);
+                        circle2radius = 20 + r.nextInt(21);
+                    }
+                }
+
             }
         }
-
         return true;
     }
     public void shrink(){
@@ -230,12 +290,23 @@ public class startGameView extends SurfaceView implements SurfaceHolder.Callback
     public int displayResult(){
         Paint result= new Paint();
         result.setColor(Color.RED);
-        if(Math.abs(circle1x - circle2x)<circle1radius*2 && Math.abs(circle1y-circle2y)<circle1radius*2){
-           result.setColor(Color.GREEN);
-            return 1;
+        if(circle1radius>circle2radius) {
+            if (Math.abs(circle1x - circle2x) < circle1radius * 2 && Math.abs(circle1y - circle2y) < circle1radius * 2) {
+                result.setColor(Color.GREEN);
+                return 1;
+            }
+        }
+        else{
+            if (Math.abs(circle1x - circle2x) < circle2radius * 2 && Math.abs(circle1y - circle2y) < circle2radius * 2) {
+                result.setColor(Color.GREEN);
+                return 1;
+            }
         }
         return 0;
     }
+
+
+
     // Thread subclass to run the main game loop
     private class GameThread extends Thread
     {
