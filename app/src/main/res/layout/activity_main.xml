@@ -46,20 +46,6 @@
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="@string/highscores_button"
-            android:id="@+id/highscores_button"
-            android:layout_marginTop="35dp"
-            android:layout_below="@+id/settings_button"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:background="#516D6D"
-            android:textColor="#B4B6B6"
-            android:textSize="18dp"
-            android:textStyle="bold" />
-
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
             android:text="@string/settings_button"
             android:id="@+id/settings_button"
             android:layout_marginTop="35dp"
@@ -69,7 +55,22 @@
             android:layout_alignRight="@+id/highscores_button"
             android:layout_alignEnd="@+id/highscores_button"
             android:layout_gravity="center_horizontal"
-            android:background="#516D6D"
+            android:background="#ffa7a9a9"
+            android:textColor="#B4B6B6"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:onClick="settings"/>
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/highscores_button"
+            android:id="@+id/highscores_button"
+            android:layout_marginTop="35dp"
+            android:layout_below="@+id/settings_button"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:background="#ffa7a9a9"
             android:textColor="#B4B6B6"
             android:textSize="18dp"
             android:textStyle="bold" />
